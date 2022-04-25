@@ -12,4 +12,14 @@ router.get('/book', (req, res, next) => {
     .catch(err => console.log("A error occuried searching for books on db" ,err))
 });
 
+router.get('/book/:bookId', (req, res, next) =>{
+    const id = req.params.bookId
+
+    Book.findById(id)
+    .then((bookDetails) => {
+        console.log("this book has been searched");
+        res.render("individual-book", bookDetails)
+    })
+})
+
 module.exports = router;
