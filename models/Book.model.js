@@ -7,11 +7,10 @@ const bookSchema = new Schema(
     title: {
         type: String,
         required: true,
-        unique: true,
     },
     description: {
         type: String,
-        minLength: 100,
+        minLength: 5,
     },
     author: String,
     rating: Number
