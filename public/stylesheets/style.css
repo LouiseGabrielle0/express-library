@@ -10,3 +10,15 @@ a {
 h1 {
   color: 15px;
 }
+
+#books-container {
+  border-top: 1px solid grey;
+}
+
+.container {
+  border: 1px solid grey;
+  margin: 10px;
+  padding: 10px;
+  text-align: center;
+  background-color: rgba(255, 166, 0, 0.247)
+}
