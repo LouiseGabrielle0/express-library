@@ -4,8 +4,15 @@ const { Schema, model } = require('mongoose');
  
 const bookSchema = new Schema(
   {
-    title: String,
-    description: String,
+    title: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    description: {
+        type: String,
+        minLength: 100,
+    },
     author: String,
     rating: Number
   },
