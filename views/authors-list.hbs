@@ -1,0 +1,16 @@
+<header>
+<h1>List of Author</h1>
+
+</div>
+</header>
+<h4></h4>
+<div id="books-container">
+    {{#each author}}
+    <div class="container">
+    <h4>{{this.title}}</h4>
+    <h5> Favourite Book {{this.favouriteBook}}</h5>
+    <h5>From {{this.country}}</h5>
+    </div>
+    {{/each}}
+</div>
+<a href="/authors/new">Add a new author</a>
