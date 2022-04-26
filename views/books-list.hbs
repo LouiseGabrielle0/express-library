@@ -6,7 +6,6 @@
     <a href="/rating/3">3+ star</a>
     <a href="/rating/5">5+ star</a>
     <a href="/rating/7">7+ star</a>
-
    </div>
 </div>
 </header>
@@ -15,6 +14,7 @@
     {{#each books}}
     <div class="container">
     <h4>{{this.title}}</h4>
+    <h5> By {{this.author.title}}</h5>
     <h5>{{this.rating}}/10</h5>
     <a href="/books/{{this._id}}">More Details</a>
     </div>
