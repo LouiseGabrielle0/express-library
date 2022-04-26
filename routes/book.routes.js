@@ -16,26 +16,6 @@ router.get("/books", (req, res, next) => {
     );
 });
 
-//Display all authors - READ
-router.get("/authors", (req, res, next) => {
-  Author.find()
-    .then((authorArray) => {
-      res.render("authors-list", { author: authorArray });
-    })
-    .catch((err) =>
-      console.log("A error occured while searching for authors on the db", err)
-    );
-});
-
-// Render a form to CREATE new author
-router.get("/authors/new", (req, res, next) => {
-  res
-    .render("new-author")
-
-    .catch((err) =>
-      console.log("A error occured while looking for the author", err)
-    );
-});
 
 // Render a form to CREATE new book
 router.get("/books/new", (req, res, next) => {
@@ -48,23 +28,6 @@ router.get("/books/new", (req, res, next) => {
     );
 });
 
-// CREATE new Authoer - process the form
-router.post("/author/create", (req, res, next) => {
-    console.log(req.body);
-  
-    const newAuthor = {
-      title: req.body.title,
-      favouriteBook: req.body.favouriteBook,
-      country: req.body.country,
-    };
-  
-    Author.create(newAuthor)
-      .then((newAuthor) => {
-        res.redirect("/authors");
-        console.log("A new author was created", newAuthor);
-      })
-      .catch((err) => console.log("There was an error creating a new author", err));
-  });
 
 // CREATE new book - process the form
 router.post("/books/create", (req, res, next) => {
@@ -84,6 +47,7 @@ router.post("/books/create", (req, res, next) => {
     })
     .catch((err) => console.log("There was an error creating a new book", err));
 });
+
 
 // Display individual book details - READ
 router.get("/books/:bookId", (req, res, next) => {
