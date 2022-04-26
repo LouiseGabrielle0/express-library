@@ -3,116 +3,151 @@ const Author = require("../models/Author.model");
 
 const router = require("express").Router();
 
-
 // Display all books - READ
-router.get('/books', (req, res, next) => {
-    Book.find()
+router.get("/books", (req, res, next) => {
+  Book.find()
     .populate("author")
     .then((booksArray) => {
-       console.log("these books were found", booksArray);
-        res.render("books-list", {books: booksArray});
+      console.log("these books were found", booksArray);
+      res.render("books-list", { books: booksArray });
     })
-    .catch(err => console.log("A error occuried searching for books on db" ,err))
+    .catch((err) =>
+      console.log("A error occuried searching for books on db", err)
+    );
 });
 
+//Display all authors - READ
+router.get("/authors", (req, res, next) => {
+  Author.find()
+    .then((authorArray) => {
+      res.render("authors-list", { author: authorArray });
+    })
+    .catch((err) =>
+      console.log("A error occured while searching for authors on the db", err)
+    );
+});
+
+// Render a form to CREATE new author
+router.get("/authors/new", (req, res, next) => {
+  res
+    .render("new-author")
+
+    .catch((err) =>
+      console.log("A error occured while looking for the author", err)
+    );
+});
 
 // Render a form to CREATE new book
-router.get('/books/new', (req, res, next) => {
-    Author.find()
+router.get("/books/new", (req, res, next) => {
+  Author.find()
     .then((authorArray) => {
-    res.render("new-book", {author: authorArray});
-})
-.catch(err => console.log("A error occured while looking for the author", err))
-})
+      res.render("new-book", { author: authorArray });
+    })
+    .catch((err) =>
+      console.log("A error occured while looking for the author", err)
+    );
+});
 
+// CREATE new Authoer - process the form
+router.post("/author/create", (req, res, next) => {
+    console.log(req.body);
+  
+    const newAuthor = {
+      title: req.body.title,
+      favouriteBook: req.body.favouriteBook,
+      country: req.body.country,
+    };
+  
+    Author.create(newAuthor)
+      .then((newAuthor) => {
+        res.redirect("/authors");
+        console.log("A new author was created", newAuthor);
+      })
+      .catch((err) => console.log("There was an error creating a new author", err));
+  });
 
 // CREATE new book - process the form
-router.post('/books/create', (req, res, next) =>{
-    console.log(req.body)
+router.post("/books/create", (req, res, next) => {
+  console.log(req.body);
 
-    const newBook = {
-        title: req.body.title,
-        description: req.body.description,
-        author: req.body.author,
-        rating: req.body.rating,
-    }
-    
-    Book.create(newBook)
-    .then(newBook => {
-        res.redirect("/books")
-        console.log("A new book was created", newBook)
+  const newBook = {
+    title: req.body.title,
+    description: req.body.description,
+    author: req.body.author,
+    rating: req.body.rating,
+  };
+
+  Book.create(newBook)
+    .then((newBook) => {
+      res.redirect("/books");
+      console.log("A new book was created", newBook);
     })
-    .catch(err =>console.log("There was an error creating a new book", err))
-})
-
+    .catch((err) => console.log("There was an error creating a new book", err));
+});
 
 // Display individual book details - READ
-router.get('/books/:bookId', (req, res, next) =>{
-    const id = req.params.bookId
+router.get("/books/:bookId", (req, res, next) => {
+  const id = req.params.bookId;
 
-    Book.findById(id)
+  Book.findById(id)
     .populate("author")
     .then((bookDetails) => {
-        console.log("this book has been searched");
-        res.render("individual-book", bookDetails)
-    })
-})
+      console.log("this book has been searched");
+      res.render("individual-book", bookDetails);
+    });
+});
 
 // Edit individual book details - render form - UPDATE
-router.get('/books/:bookId/edit', (req, res, next) =>{
-    const id = req.params.bookId
+router.get("/books/:bookId/edit", (req, res, next) => {
+  const id = req.params.bookId;
 
-    Book.findById(id)
+  Book.findById(id)
     .then((bookDetails) => {
-        res.render("edit-book", bookDetails)
+      res.render("edit-book", bookDetails);
     })
-    .catch(err => console.log("There was an error fetching the book to be edited", err))
+    .catch((err) =>
+      console.log("There was an error fetching the book to be edited", err)
+    );
 });
 
 // Edit individual book details - proccess from - UPDATE
-router.post('/books/:bookId/edit', (req, res, next) =>{
+router.post("/books/:bookId/edit", (req, res, next) => {
+  const id = req.params.bookId;
 
-    const id = req.params.bookId
-
-    const updateBook = {
-        title: req.body.title,
-        author: req.body.author,
-        description: req.body.description,
-        rating: req.body.rating,
-    }
-    Book.findByIdAndUpdate(id, updateBook)
+  const updateBook = {
+    title: req.body.title,
+    author: req.body.author,
+    description: req.body.description,
+    rating: req.body.rating,
+  };
+  Book.findByIdAndUpdate(id, updateBook)
     .then((updatedBook) => {
-        res.redirect(`/books/${updatedBook._id}`)
+      res.redirect(`/books/${updatedBook._id}`);
     })
-    .catch(err =>console.log("There was an error updating a book", err))
-})
-
-
-// Delete a book  from
-router.post('/books/:bookId/delete', (req, res, next) => {
-    const id = req.params.bookId
-    Book.findByIdAndRemove(id)
-    .then(() =>
-    res.redirect("/books"))
-    .catch(err => console.log("There wasan error deleting a book", err)
-        )
-})
-
-
-// Filter by rating
-router.get('/rating/:rating', (req, res, next) => {
-    const rate = req.params.rating
-    const bookRating = parseInt(rate)
-    console.log("User searched by rating", bookRating)
-    Book.find({rating: {$gt :bookRating}})
-    .then((booksByRatingArray) => {
-       console.log("these books were found", booksByRatingArray);
-        res.render("books-filtered", {booksRating: booksByRatingArray});
-    })
-    .catch(err => console.log("A error occuried returning books by rating" ,err))
+    .catch((err) => console.log("There was an error updating a book", err));
 });
 
+// Delete a book  from
+router.post("/books/:bookId/delete", (req, res, next) => {
+  const id = req.params.bookId;
+  Book.findByIdAndRemove(id)
+    .then(() => res.redirect("/books"))
+    .catch((err) => console.log("There wasan error deleting a book", err));
+});
 
-
+// Filter by rating
+router.get("/rating/:rating", (req, res, next) => {
+  const rate = req.params.rating;
+  const bookRating = parseInt(rate);
+  console.log("User searched by rating", bookRating);
+  Book.find({ rating: { $gt: bookRating } })
+    .then((booksByRatingArray) => {
+      console.log("these books were found", booksByRatingArray);
+      res.render("books-filtered", { booksRating: booksByRatingArray });
+    })
+    .catch((err) =>
+      console.log("A error occuried returning books by rating", err)
+    );
+});
 
 module.exports = router;
