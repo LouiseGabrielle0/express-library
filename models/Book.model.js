@@ -1,5 +1,6 @@
 // models/Book.model.js
  
+const { default: mongoose } = require('mongoose');
 const { Schema, model } = require('mongoose');
  
 const bookSchema = new Schema(
@@ -12,7 +13,10 @@ const bookSchema = new Schema(
         type: String,
         minLength: 5,
     },
-    author: String,
+    author: {
+      type: mongoose.Schema.Types.ObjectId, 
+      ref: "Author",
+    },
     rating: Number
   },
   {
