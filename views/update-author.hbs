@@ -1,0 +1,27 @@
+<header>
+<h1>Update Author</h1>
+</header>
+
+<div>
+    
+<form action="/authors/{{_id}}/edit" method="POST">
+  <label> Title: 
+    <input type="text" name="title" value="{{this.title}}" />
+  </label>
+
+  <label> Favourite Book: 
+    <input type="text" name="favouriteBook" value="{{this.favouriteBook}}" />
+  </label>
+
+   <label> Country: 
+    <input type="text" name="country" value="{{this.country}}" />
+  </label>
+
+
+  <button type="submit"> Edit </button>
+</form>
+</div>
+<a href="/books">Back</a>
+
+</div>
+

@@ -8,9 +8,11 @@
     {{#each author}}
     <div class="container">
     <h4>{{this.title}}</h4>
-    <h5> Favourite Book {{this.favouriteBook}}</h5>
-    <h5>From {{this.country}}</h5>
+    <h5> Favourite Book: {{this.favouriteBook}}</h5>
+    <h5>From: {{this.country}}</h5>
+    <a href="/author/{{this._id}}/edit">Edit Details</a>
     </div>
+
     {{/each}}
 </div>
 <a href="/authors/new">Add a new author</a>
