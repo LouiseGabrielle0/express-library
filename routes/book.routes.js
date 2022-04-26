@@ -9,25 +9,23 @@ router.get("/books", (req, res, next) => {
     .populate("author")
     .then((booksArray) => {
       console.log("these books were found", booksArray);
-      res.render("books-list", { books: booksArray });
+      res.render("books/books-list", { books: booksArray });
     })
     .catch((err) =>
       console.log("A error occuried searching for books on db", err)
     );
 });
 
-
 // Render a form to CREATE new book
 router.get("/books/new", (req, res, next) => {
   Author.find()
     .then((authorArray) => {
-      res.render("new-book", { author: authorArray });
+      res.render("books/new-book", { author: authorArray });
     })
     .catch((err) =>
       console.log("A error occured while looking for the author", err)
     );
 });
-
 
 // CREATE new book - process the form
 router.post("/books/create", (req, res, next) => {
@@ -42,12 +40,11 @@ router.post("/books/create", (req, res, next) => {
 
   Book.create(newBook)
     .then((newBook) => {
-      res.redirect("/books");
+      res.redirect("books/books");
       console.log("A new book was created", newBook);
     })
     .catch((err) => console.log("There was an error creating a new book", err));
 });
-
 
 // Display individual book details - READ
 router.get("/books/:bookId", (req, res, next) => {
@@ -57,7 +54,7 @@ router.get("/books/:bookId", (req, res, next) => {
     .populate("author")
     .then((bookDetails) => {
       console.log("this book has been searched");
-      res.render("individual-book", bookDetails);
+      res.render("books/individual-book", bookDetails);
     });
 });
 
@@ -67,7 +64,12 @@ router.get("/books/:bookId/edit", (req, res, next) => {
 
   Book.findById(id)
     .then((bookDetails) => {
-      res.render("edit-book", bookDetails);
+      res.render("/books/edit-book", bookDetails);
+    //   const authorID = req.params.author;
+    //   Author.find(authorID);
+    // })
+    // .then((authorArray) => {
+    //   res.render("new-book", { author: authorArray });
     })
     .catch((err) =>
       console.log("There was an error fetching the book to be edited", err)
@@ -86,17 +88,17 @@ router.post("/books/:bookId/edit", (req, res, next) => {
   };
   Book.findByIdAndUpdate(id, updateBook)
     .then((updatedBook) => {
-      res.redirect(`/books/${updatedBook._id}`);
+      res.redirect(`books/books/${updatedBook._id}`);
     })
     .catch((err) => console.log("There was an error updating a book", err));
 });
 
-// Delete a book  from
+// Delete a book from
 router.post("/books/:bookId/delete", (req, res, next) => {
   const id = req.params.bookId;
   Book.findByIdAndRemove(id)
-    .then(() => res.redirect("/books"))
-    .catch((err) => console.log("There wasan error deleting a book", err));
+    .then(() => res.redirect("books/books"))
+    .catch((err) => console.log("There was an error deleting a book", err));
 });
 
 // Filter by rating
@@ -107,7 +109,7 @@ router.get("/rating/:rating", (req, res, next) => {
   Book.find({ rating: { $gt: bookRating } })
     .then((booksByRatingArray) => {
       console.log("these books were found", booksByRatingArray);
-      res.render("books-filtered", { booksRating: booksByRatingArray });
+      res.render("books/books-filtered", { booksRating: booksByRatingArray });
     })
     .catch((err) =>
       console.log("A error occuried returning books by rating", err)

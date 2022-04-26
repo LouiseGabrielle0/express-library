@@ -6,7 +6,7 @@ const router = require("express").Router();
 router.get("/authors", (req, res, next) => {
     Author.find()
       .then((authorArray) => {
-        res.render("authors-list", { author: authorArray });
+        res.render("authors/authors-list", { author: authorArray });
       })
       .catch((err) =>
         console.log("A error occured while searching for authors on the db", err)
@@ -16,7 +16,7 @@ router.get("/authors", (req, res, next) => {
   // Render a form to CREATE new author
   router.get("/authors/new", (req, res, next) => {
     res
-      .render("new-author")
+      .render("authors/new-author")
   
       .catch((err) =>
         console.log("A error occured while looking for the author", err)
@@ -35,7 +35,7 @@ router.post("/author/create", (req, res, next) => {
   
     Author.create(newAuthor)
       .then((newAuthor) => {
-        res.redirect("/authors");
+        res.redirect("authors/authors");
         console.log("A new author was created", newAuthor);
       })
       .catch((err) => console.log("There was an error creating a new author", err));
@@ -49,7 +49,7 @@ router.get("/author/:authorId/edit", (req, res, next) => {
     Author.findById(id)
       .then((authorDetails) => {
           console.log("found the author", authorDetails);
-        res.render("update-author", authorDetails);
+        res.render("authors/update-author", authorDetails);
       })
       .catch((err) =>
         console.log("There was an error fetching the author to be edited", err)
@@ -67,7 +67,7 @@ router.post("/authors/:authorId/edit", (req, res, next) => {
       };
     Author.findByIdAndUpdate(id, updateAuthor)
       .then((updatedAuthor) => {
-        res.redirect(`/authors`);
+        res.redirect(`authors/authors`);
       })
       .catch((err) => console.log("There was an error updating a author", err));
   });

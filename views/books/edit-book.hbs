@@ -6,9 +6,12 @@
     <input type="text" name="title" value="{{title}}" />
   </label>
 
-  <label> Author: 
-    <input type="text" name="author" value="{{author}}" />
-  </label>
+  <label> Author: <br/>
+  <select name="author">
+    {{#each author}}
+    <option value="{{_id}}">{{title}}</option>
+    {{/each}}
+    </select>
 
   <label> Description: 
     <textarea name="description" cols="30" rows="4">{{description}}</textarea>
