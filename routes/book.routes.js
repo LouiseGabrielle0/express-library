@@ -1,4 +1,5 @@
 const Book = require("../models/Book.model");
+const Author = require("../models/Author.model");
 
 const router = require("express").Router();
 
@@ -6,6 +7,7 @@ const router = require("express").Router();
 // Display all books - READ
 router.get('/books', (req, res, next) => {
     Book.find()
+    .populate("author")
     .then((booksArray) => {
        console.log("these books were found", booksArray);
         res.render("books-list", {books: booksArray});
@@ -16,18 +18,25 @@ router.get('/books', (req, res, next) => {
 
 // Render a form to CREATE new book
 router.get('/books/new', (req, res, next) => {
-    res.render("new-book")
+    Author.find()
+    .then((authorArray) => {
+    res.render("new-book", {author: authorArray});
 })
+.catch(err => console.log("A error occured while looking for the author", err))
+})
+
 
 // CREATE new book - process the form
 router.post('/books/create', (req, res, next) =>{
     console.log(req.body)
+
     const newBook = {
         title: req.body.title,
-        author: req.body.author,
         description: req.body.description,
+        author: req.body.author,
         rating: req.body.rating,
     }
+    
     Book.create(newBook)
     .then(newBook => {
         res.redirect("/books")
@@ -42,6 +51,7 @@ router.get('/books/:bookId', (req, res, next) =>{
     const id = req.params.bookId
 
     Book.findById(id)
+    .populate("author")
     .then((bookDetails) => {
         console.log("this book has been searched");
         res.render("individual-book", bookDetails)
