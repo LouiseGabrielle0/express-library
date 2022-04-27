@@ -40,7 +40,8 @@ router.post("/books/create", (req, res, next) => {
 
   Book.create(newBook)
     .then((newBook) => {
-      res.redirect("books/books");
+
+      res.redirect("/books");
       console.log("A new book was created", newBook);
     })
     .catch((err) => console.log("There was an error creating a new book", err));
@@ -61,15 +62,10 @@ router.get("/books/:bookId", (req, res, next) => {
 // Edit individual book details - render form - UPDATE
 router.get("/books/:bookId/edit", (req, res, next) => {
   const id = req.params.bookId;
-
+console.log("This book has been selected to be updated updated", id);
   Book.findById(id)
     .then((bookDetails) => {
       res.render("/books/edit-book", bookDetails);
-    //   const authorID = req.params.author;
-    //   Author.find(authorID);
-    // })
-    // .then((authorArray) => {
-    //   res.render("new-book", { author: authorArray });
     })
     .catch((err) =>
       console.log("There was an error fetching the book to be edited", err)
@@ -77,21 +73,21 @@ router.get("/books/:bookId/edit", (req, res, next) => {
 });
 
 // Edit individual book details - proccess from - UPDATE
-router.post("/books/:bookId/edit", (req, res, next) => {
-  const id = req.params.bookId;
+// router.post("/books/:bookId/edit", (req, res, next) => {
+//   const id = req.params.bookId;
 
-  const updateBook = {
-    title: req.body.title,
-    author: req.body.author,
-    description: req.body.description,
-    rating: req.body.rating,
-  };
-  Book.findByIdAndUpdate(id, updateBook)
-    .then((updatedBook) => {
-      res.redirect(`books/books/${updatedBook._id}`);
-    })
-    .catch((err) => console.log("There was an error updating a book", err));
-});
+//   const updateBook = {
+//     title: req.body.title,
+//     author: req.body.author,
+//     description: req.body.description,
+//     rating: req.body.rating,
+//   };
+//   Book.findByIdAndUpdate(id, updateBook)
+//     .then((updatedBook) => {
+//       res.redirect(`books/books/${updatedBook._id}`);
+//     })
+//     .catch((err) => console.log("There was an error updating a book", err));
+// });
 
 // Delete a book from
 router.post("/books/:bookId/delete", (req, res, next) => {
