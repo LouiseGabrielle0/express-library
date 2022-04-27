@@ -14,13 +14,18 @@ router.post("/register", (req, res, next) => {
     
     const {email, password} = req.body //ES6 object destructuring
 
+    if(!email || !password){
+        res.render("auth/register", {errorMessage: "Please provide email and password"})
+        return
+    }
+
     bcryptjs
     .genSalt(saltRounds)
     .then( salt => {
       return bcryptjs.hash(password, salt)
     })
     .then( hashedPassword => {
-        console.log("hashedPassowrd", hashedPassword);
+        console.log("hashedPassword", hashedPassword);
         const userDetails = {
             email: email,
             passwordHash: hashedPassword

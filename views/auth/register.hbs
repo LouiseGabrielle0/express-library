@@ -3,6 +3,12 @@
 <div id="form">
   <h2>Register</h2>
   <form action="/register" method="POST">
+
+  {{#if errorMessage}}
+  <p class="warning">
+      Please provide email address and password
+  </p>
+  {{/if}}
     <label> Email
       <input type="email" name="email" placeholder="rockstar@ironhack.com" required/>
     </label>
