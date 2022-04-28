@@ -1,29 +1,48 @@
-<!DOCTYPE html>
 <html lang="en">
 
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <title>{{appTitle}}</title>
-      <link rel="stylesheet" href="/stylesheets/style.css" />
-   </head>
-   
-   <body>
-<header>
-   <nav>
-      <a href="/">Home</a>
-      <a href="/books">All Books</a>
-      <a href="/books/new">Add New Book</a>
-      <a href="/authors">All Authors</a>
-      <a href="/authors/new">Add New Author</a>
-      <a href="/register">Register</a>
-      <a href="/login">Login</a>
-   </nav>
-</header>
-      {{{body}}}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>{{appTitle}}</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
 
-      <script src="/js/script.js"></script>
-   </body>
+  <body>
+    <header>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/books">All Books</a>
+        <a href="/books/new">Add New Book</a>
+        <a href="/authors">All Authors</a>
+        <a href="/authors/new">Add New Author</a>
+        {{#if session.currentUser}}
+        <a href="/login">Logout</a>
+        {{else}}
+        <a href="/register">Register</a>
+        <a href="/login">Login</a>
+        {{/if}}
+       
+      {{#if session.currentUser}}
+      <h5>You are logged in</h5>
+       <form action="/logout" method="POST">
+          <button>Logout</button>
+        </form>
+      
+      {{else}}
+      <h5>You are not logged in</h5>
+       <form action="/login" method="POST">
+          <button>Login</button>
+        </form>
+      {{/if}}
+
+
+      </nav>
+    
+    </header>
+    {{{body}}}
+
+    <script src="/js/script.js"></script>
+  </body>
 
 </html>
