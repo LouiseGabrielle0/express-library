@@ -3,8 +3,20 @@ const Author = require("../models/Author.model");
 
 const router = require("express").Router();
 
+const checkIfUserLoggedIn = (req, res, next) => {
+  if(req.session.currentUser){
+      // user is logged in :) 
+      next();
+  }else {
+      //user not logged in....
+      res.send("it's not your lucky day my fren")
+  }
+  }
+
+
+
 // Display all books - READ
-router.get("/books", (req, res, next) => {
+router.get("/books", checkIfUserLoggedIn, (req, res, next) => {
   Book.find()
     .populate("author")
     .then((booksArray) => {
