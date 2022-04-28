@@ -26,6 +26,13 @@ const projectName = "library-project";
 
 app.locals.appTitle = `${capitalized(projectName)} created with IronLauncher`;
 
+
+// this function allows us to use data accross the whole app - it runs everytime to check for changes. For every request - this function gets exceuted. 
+app.use((req, res, next) => {
+    res.locals.session = req.session // allow access to session data from layout.hbs
+    next() // this line keeps the flow moving so it doesn't get stuck on this function
+})
+
 // 👇 Start handling routes here
 const index = require("./routes/index.routes");
 app.use("/", index);
