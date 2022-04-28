@@ -33,6 +33,8 @@ app.use((req, res, next) => {
     next() // this line keeps the flow moving so it doesn't get stuck on this function
 })
 
+const isLoggedIn = require("./middleware/route-guard")
+
 // 👇 Start handling routes here
 const index = require("./routes/index.routes");
 app.use("/", index);
@@ -40,12 +42,11 @@ app.use("/", index);
 const authRoutes = require("./routes/auth.routes");
 app.use("/", authRoutes )
 
-const bookRoutes = require("./routes/book.routes");
-app.use("/", bookRoutes)
 
 //can also be done like this --- same thing less lines
 app.use("/",require("./routes/author.routes"))
 
+app.use("/books", isLoggedIn, require("./routes/book.routes"))
 
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes

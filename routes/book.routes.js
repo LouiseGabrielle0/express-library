@@ -3,20 +3,10 @@ const Author = require("../models/Author.model");
 
 const router = require("express").Router();
 
-const checkIfUserLoggedIn = (req, res, next) => {
-  if(req.session.currentUser){
-      // user is logged in :) 
-      next();
-  }else {
-      //user not logged in....
-      res.send("it's not your lucky day my fren")
-  }
-  }
-
 
 
 // Display all books - READ
-router.get("/books", checkIfUserLoggedIn, (req, res, next) => {
+router.get("/", (req, res, next) => {
   Book.find()
     .populate("author")
     .then((booksArray) => {
@@ -29,7 +19,7 @@ router.get("/books", checkIfUserLoggedIn, (req, res, next) => {
 });
 
 // Render a form to CREATE new book
-router.get("/books/new", (req, res, next) => {
+router.get("/new", (req, res, next) => {
   Author.find()
     .then((authorArray) => {
       res.render("books/new-book", { author: authorArray });
@@ -40,7 +30,7 @@ router.get("/books/new", (req, res, next) => {
 });
 
 // CREATE new book - process the form
-router.post("/books/create", (req, res, next) => {
+router.post("/create", (req, res, next) => {
   console.log(req.body);
 
   const newBook = {
@@ -60,7 +50,7 @@ router.post("/books/create", (req, res, next) => {
 });
 
 // Display individual book details - READ
-router.get("/books/:bookId", (req, res, next) => {
+router.get("/:bookId", (req, res, next) => {
   const id = req.params.bookId;
 
   Book.findById(id)
@@ -72,7 +62,7 @@ router.get("/books/:bookId", (req, res, next) => {
 });
 
 // Edit individual book details - render form - UPDATE
-router.get("/books/:bookId/edit", (req, res, next) => {
+router.get("/:bookId/edit", (req, res, next) => {
   const id = req.params.bookId;
 console.log("This book has been selected to be updated updated", id);
   Book.findById(id)
@@ -102,7 +92,7 @@ console.log("This book has been selected to be updated updated", id);
 // });
 
 // Delete a book from
-router.post("/books/:bookId/delete", (req, res, next) => {
+router.post("/:bookId/delete", (req, res, next) => {
   const id = req.params.bookId;
   Book.findByIdAndRemove(id)
     .then(() => res.redirect("books/books"))
